@@ -8,11 +8,11 @@ services:
       APP_ENV: ${APP_ENV}
       TZ: ${TZ}
     volumes:
-      - ./:/go/src/github.com/aberyotaro/sample-api:delegated
+      - ./:/go/src/github.com/aberyotaro/gql-sample-api:delegated
     ports:
       - "80:80"
       - "443:443"
-    working_dir: /go/src/github.com/aberyotaro/sample-api
+    working_dir: /go/src/github.com/aberyotaro/gql_sample_api
     depends_on:
       - db
   db:
