@@ -5,4 +5,4 @@ RUN apk add --update --no-cache \
     tar \
     postgresql-client
 
-CMD ["go", "run", "/go/src/app/main.go"]
+CMD ["go", "run", "/go/src/app/server.go"]
