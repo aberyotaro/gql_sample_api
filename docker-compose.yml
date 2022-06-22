@@ -8,11 +8,11 @@ services:
       APP_ENV: ${APP_ENV}
       TZ: ${TZ}
     volumes:
-      - ./:/go/src/github.com/aberyotaro/gql-sample-api:delegated
+      - ./app:/go/src/app:delegated
     ports:
       - "80:80"
       - "443:443"
-    working_dir: /go/src/github.com/aberyotaro/gql_sample_api
+    working_dir: /go/src/app
     depends_on:
       - db
   db:
@@ -24,3 +24,5 @@ services:
       POSTGRES_PASSWORD: ${DB_PASS}
     ports:
       - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data:delegated
