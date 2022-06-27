@@ -2,7 +2,6 @@
 package graph
 
 import (
-	"github.com/aberyotaro/gql_sample_api/graph/model"
 	"gorm.io/gorm"
 )
 
@@ -11,6 +10,5 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	DB    *gorm.DB
-	todos []*model.Todo
+	DB *gorm.DB
 }
