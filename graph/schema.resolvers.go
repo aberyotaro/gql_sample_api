@@ -6,17 +6,24 @@ package graph
 import (
 	"context"
 	"fmt"
-
 	"github.com/aberyotaro/gql_sample_api/graph/generated"
 	"github.com/aberyotaro/gql_sample_api/graph/model"
+	"strconv"
 )
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
 	u := &model.User{
 		Name: input.Name,
 	}
-	res := r.DB.Create(u)
-	return u, res.Error
+
+	if res, err := r.DB.Exec("INSERT INTO users (name) VALUES ($1)", u.Name); err != nil {
+		return nil, err
+	} else {
+		id, _ := res.LastInsertId()
+		u.ID = strconv.FormatInt(id, 10)
+	}
+
+	return u, nil
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
