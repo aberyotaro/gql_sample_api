@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/aberyotaro/gql_sample_api/graph/generated"
 	"github.com/aberyotaro/gql_sample_api/graph/model"
-	"strconv"
 )
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
@@ -16,11 +15,15 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		Name: input.Name,
 	}
 
-	if res, err := r.DB.Exec("INSERT INTO users (name) VALUES ($1)", u.Name); err != nil {
+	stmt, err := r.DB.Prepare("INSERT INTO users (name) VALUES ($1) RETURNING id")
+	if err != nil {
 		return nil, err
-	} else {
-		id, _ := res.LastInsertId()
-		u.ID = strconv.FormatInt(id, 10)
+	}
+	defer stmt.Close()
+
+	err = stmt.QueryRow(u.Name).Scan(&u.ID)
+	if err != nil {
+		return nil, err
 	}
 
 	return u, nil
