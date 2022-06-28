@@ -18,7 +18,7 @@ import (
 const defaultPort = "8080"
 
 func main() {
-	port := os.Getenv("DB_PORT")
+	port := defaultPort
 
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
