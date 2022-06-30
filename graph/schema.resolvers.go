@@ -23,7 +23,22 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	var users []*model.User
+	res := r.ORM.Find(&users)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return users, nil
+}
+
+func (r *queryResolver) User(ctx context.Context, id int) (*model.User, error) {
+	var user model.User
+	res := r.ORM.First(&user, id)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return &user, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
