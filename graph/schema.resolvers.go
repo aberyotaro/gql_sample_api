@@ -5,7 +5,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"github.com/aberyotaro/gql_sample_api/graph/generated"
 	"github.com/aberyotaro/gql_sample_api/graph/model"
 )
@@ -15,15 +14,9 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		Name: input.Name,
 	}
 
-	stmt, err := r.DB.Prepare("INSERT INTO users (name) VALUES ($1) RETURNING id")
-	if err != nil {
-		return nil, err
-	}
-	defer stmt.Close()
-
-	err = stmt.QueryRow(u.Name).Scan(&u.ID)
-	if err != nil {
-		return nil, err
+	res := r.ORM.Create(u)
+	if res.Error != nil {
+		return nil, res.Error
 	}
 
 	return u, nil

@@ -3,6 +3,7 @@ package graph
 
 import (
 	"database/sql"
+	"gorm.io/gorm"
 )
 
 // This file will not be regenerated automatically.
@@ -10,6 +11,6 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	DB *sql.DB
-	//DB *gorm.DB
+	DB  *sql.DB
+	ORM *gorm.DB
 }

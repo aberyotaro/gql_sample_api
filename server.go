@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"os"
@@ -27,7 +29,6 @@ func main() {
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
 	)
-	//db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
@@ -35,7 +36,9 @@ func main() {
 	}
 	defer db.Close()
 
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{DB: db}}))
+	orm, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{DB: db, ORM: orm}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
